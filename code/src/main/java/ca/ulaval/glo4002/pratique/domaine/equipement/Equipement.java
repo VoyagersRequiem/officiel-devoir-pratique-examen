@@ -43,7 +43,7 @@ public abstract class Equipement {
     public abstract List<Equipement> getEquipementDansContenant();
 
 
-    public StatutEquipement getStatutInspection() {
+    public StatutEquipement getStatut(boolean inspectionSeulement) {
         LocalDateTime aujourdhui = LocalDateTime.now();
         if( this.derniereInspection.plus(this.dureValiditeInspection).isAfter(aujourdhui)) {
             return StatutEquipement.A_INSPECTER;

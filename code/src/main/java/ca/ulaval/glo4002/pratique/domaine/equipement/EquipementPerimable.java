@@ -39,4 +39,16 @@ public class EquipementPerimable extends Equipement {
     public List<Equipement> getEquipementDansContenant() {
         return Collections.emptyList();
     }
+
+    @Override
+    public StatutEquipement getStatut(boolean inspectionSeulement) {
+        LocalDateTime aujourdhui = LocalDateTime.now();
+        if (this.datePeremption.isAfter(aujourdhui) && !inspectionSeulement) {
+            return StatutEquipement.A_REMPLACER;
+        }
+        else if( this.derniereInspection.plus(this.dureValiditeInspection).isAfter(aujourdhui)) {
+            return StatutEquipement.A_INSPECTER;
+        }
+        return StatutEquipement.OK;
+    }
 }

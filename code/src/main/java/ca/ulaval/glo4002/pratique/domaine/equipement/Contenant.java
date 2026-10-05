@@ -38,4 +38,17 @@ public class Contenant extends Equipement {
         return null;
     }
 
+    public StatutEquipement getStatut(boolean inspectionSeulement) {
+        StatutEquipement statut = super.getStatut(inspectionSeulement);
+        for ( Equipement  equipement : equipements ) {
+            if(equipement.getStatut(inspectionSeulement) != StatutEquipement.OK) {
+                statut = equipement.getStatut(inspectionSeulement);
+            }
+            if (statut == StatutEquipement.A_REMPLACER) {
+                break;
+            }
+        }
+        return statut;
+    }
+
 }
