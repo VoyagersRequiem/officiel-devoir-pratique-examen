@@ -1,71 +1,30 @@
 package ca.ulaval.glo4002.pratique.domaine.etablissement.numero;
 
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class NoEtablissement {
-    private Long numeroV1 = null;
-    private UUID numeroV2 = null;
-
-    @Deprecated
-    public static NoEtablissement genererV1() {
-        throw new RuntimeException("La version 1 n'est plus supporté pour des nouveau numéros.");
-    }
-
-    public static NoEtablissement genererV2() {
-        return new NoEtablissement(UUID.randomUUID());
-    }
-
-    public static NoEtablissement depuisStringV1(String numero) {
-        return new NoEtablissement(Long.parseLong(numero));
-    }
-
-    public static NoEtablissement depuisStringV2(String numero) {
-        return new NoEtablissement(UUID.fromString(numero));
-    }
-
-    private NoEtablissement(Long numeroV1) {
-        this.numeroV1 = numeroV1;
-    }
-
-    private NoEtablissement(UUID numeroV2) {
-        this.numeroV2 = numeroV2;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        NoEtablissement that = (NoEtablissement) o;
-        if (this.numeroV1 != null && that.numeroV1 != null) {
-            return this.numeroV1 == that.numeroV1;
-        }
-
-        if (this.numeroV2 != null && that.numeroV2 != null) {
-            return this.numeroV2.equals(that.numeroV2);
-        }
-
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        if (this.numeroV1 != null) {
-            return this.numeroV1.hashCode();
-        }
-
-        return this.numeroV2.hashCode();
-    }
-
-    public String asString() {
-        if (this.numeroV1 != null) {
-            return this.numeroV1.toString();
+public interface NoEtablissement {
+    Pattern REGEX_NO_V1 = Pattern.compile("\\d+");
+    static NoEtablissement depuisString(String numero) {
+        Matcher matcher = REGEX_NO_V1.matcher(numero);
+        if (matcher.matches()) {
+            return new NoEtablissementLong(Long.parseLong(numero));
         } else {
-            return this.numeroV2.toString();
+            return new NoEtablissementUuid(UUID.fromString(numero));
         }
-    };
+
+    }
+
+    static NoEtablissement generer() {
+        return new NoEtablissementUuid(UUID.randomUUID());
+    }
+
+    @Override
+    boolean equals(Object o);
+
+    @Override
+    int hashCode();
+
+    String asString();
 }

@@ -20,9 +20,7 @@ public class ServiceInspection {
     private final EtablissementStockage etablissementStockage;
 
     @Inject
-    public ServiceInspection(
-        EtablissementStockage etablissementStockage
-    ) {
+    public ServiceInspection(EtablissementStockage etablissementStockage) {
         this.etablissementStockage = etablissementStockage;
     }
 
